@@ -29,7 +29,20 @@ def seed_schedule():
 
 seed_schedule()
 
-app = FastAPI(title=settings.PROJECT_NAME)
+from fastapi.responses import JSONResponse
+import json
+
+class NoASCIIJSONResponse(JSONResponse):
+    def render(self, content: any) -> bytes:
+        return json.dumps(
+            content,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=None,
+            separators=(",", ":"),
+        ).encode("utf-8")
+
+app = FastAPI(title=settings.PROJECT_NAME, default_response_class=NoASCIIJSONResponse)
 
 # CORS
 app.add_middleware(

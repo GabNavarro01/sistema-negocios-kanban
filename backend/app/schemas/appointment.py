@@ -5,7 +5,8 @@ from app.schemas.service import ServiceResponse
 
 class AppointmentBase(BaseModel):
     client_name: str
-    client_phone: str
+    client_phone: Optional[str] = None
+    client_email: Optional[str] = None
     service_id: int
     date: date
     start_time: time

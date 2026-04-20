@@ -7,9 +7,10 @@ class Appointment(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     client_name = Column(String)
-    client_phone = Column(String)
+    client_phone = Column(String, nullable=True)
+    client_email = Column(String, nullable=True)
     service_id = Column(Integer, ForeignKey("services.id"))
-    barber_id = Column(Integer, ForeignKey("barbers.id"))
+    barber_id = Column(Integer, ForeignKey("barbers.id"), nullable=True)
     date = Column(Date, index=True)
     start_time = Column(Time)
     end_time = Column(Time)

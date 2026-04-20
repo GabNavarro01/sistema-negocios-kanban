@@ -14,9 +14,10 @@ class ConnectionManager:
             self.active_connections.remove(websocket)
 
     async def broadcast(self, message: dict):
+        import json
         for connection in self.active_connections:
             try:
-                await connection.send_json(message)
+                await connection.send_text(json.dumps(message, ensure_ascii=False))
             except Exception:
                 # Handle disconnected clients gracefully
                 pass

@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
   };
 
   const handleDeleteAppointment = async (id: number) => {
-    if (!window.confirm('\u00bfEst\u00e1s seguro de que quieres eliminar este turno?')) return;
+    if (!window.confirm('¿Estás seguro de que quieres eliminar este turno?')) return;
     setAppointments(prev => prev.filter(app => app.id !== id));
     try {
       await api.delete(`/barber/appointments/${id}`);
@@ -136,7 +136,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="flex-1 overflow-hidden"><ScheduleConfig isDark={true} /></div>
         <div className="p-4 border-t border-white/5">
-          <button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} className="w-full flex items-center justify-center gap-2 py-3 text-sm font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"><LogOut size={18} /> Cerrar Sesi\u00f3n</button>
+          <button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} className="w-full flex items-center justify-center gap-2 py-3 text-sm font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"><LogOut size={18} /> Cerrar Sesión</button>
         </div>
       </aside>
 
@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
         <header className="h-20 bg-white border-b border-gray-200 px-8 flex items-center justify-between z-10">
           <div>
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">Dashboard</h2>
-            <p className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em]">Gesti\u00f3n de Turnos Semanales</p>
+            <p className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em]">Gestión de Turnos Semanales</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right"><p className="text-sm font-bold text-gray-800">Nicanor</p><p className="text-[10px] text-primary font-black uppercase tracking-tighter">Barbero Principal</p></div>
@@ -161,7 +161,7 @@ const Dashboard: React.FC = () => {
         </div>
       </main>
 
-      {/* Modal de Edici\u00f3n / Reprogramaci\u00f3n */}
+      {/* Modal de Edición / Reprogramación */}
       {editingAppointment && (
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <div className="bg-white rounded-[40px] shadow-2xl w-full max-w-xl border-[10px] border-primary overflow-hidden">
@@ -169,14 +169,14 @@ const Dashboard: React.FC = () => {
               <div>
                 <h2 className="text-3xl font-black uppercase tracking-tighter">{isRescheduling ? 'Reprogramar Turno' : 'Modificar Horario'}</h2>
                 <div className="flex items-center gap-2 text-white/80 text-xs font-bold uppercase tracking-widest mt-1">
-                  <UserIcon size={14} /> {editingAppointment.client_name} \u2022 {editingAppointment.service?.name}
+                  <UserIcon size={14} /> {editingAppointment.client_name} • {editingAppointment.service?.name}
                 </div>
               </div>
               <button onClick={closeModal} className="p-3 hover:bg-white/10 rounded-full transition-colors"><X size={28} /></button>
             </div>
             
             <div className="p-10 space-y-8">
-              {/* Selector de Fecha (Solo visible si es reprogramaci\u00f3n) */}
+              {/* Selector de Fecha (Solo visible si es reprogramación) */}
               {isRescheduling && (
                 <div className="space-y-3">
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
@@ -218,7 +218,7 @@ const Dashboard: React.FC = () => {
                 <div className="p-6 bg-primary/5 border-4 border-primary/20 rounded-[30px] flex items-center justify-between">
                   <div>
                     <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Nuevo Horario</p>
-                    <p className="text-xl font-black text-gray-900">{editForm.start_time} \u2014 {editForm.end_time}</p>
+                    <p className="text-xl font-black text-gray-900">{editForm.start_time} — {editForm.end_time}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Fecha</p>
@@ -229,7 +229,7 @@ const Dashboard: React.FC = () => {
 
               <div className="flex gap-4 pt-4">
                 <button onClick={closeModal} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-500 font-black py-5 rounded-[20px] transition-all uppercase tracking-widest text-xs">Cancelar</button>
-                <button onClick={handleSaveEdit} disabled={!editForm.start_time || !selectedDate} className="flex-[2] bg-primary hover:bg-primary-hover disabled:opacity-30 text-white font-black py-5 rounded-[20px] shadow-xl shadow-primary/30 transition-all uppercase tracking-widest text-xs">Confirmar Reprogramaci\u00f3n</button>
+                <button onClick={handleSaveEdit} disabled={!editForm.start_time || !selectedDate} className="flex-[2] bg-primary hover:bg-primary-hover disabled:opacity-30 text-white font-black py-5 rounded-[20px] shadow-xl shadow-primary/30 transition-all uppercase tracking-widest text-xs">Confirmar Reprogramación</button>
               </div>
             </div>
           </div>

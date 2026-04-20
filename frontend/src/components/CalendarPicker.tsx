@@ -79,7 +79,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
       {/* Days Grid */}
       <div className="grid grid-cols-7 gap-4 justify-items-center">
         {days.map((date, i) => {
-          if (!date) return <div key={`empty-${i}`} className="h-14 w-full" />;
+          if (!date) return <div key={`empty-${i}`} className="h-11 md:h-12 w-full" />;
           
           const isSelected = selectedDate === formatDate(date);
           const isPast = date < today;
@@ -93,8 +93,8 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
               disabled={isDisabled}
               onClick={() => onDateSelect(formatDate(date))}
               className={`
-                h-14 w-14 text-lg rounded-2xl flex items-center justify-center transition-all duration-300 relative border-2
-                ${isSelected ? 'bg-[#6b1421] border-[#6b1421] text-white font-black shadow-2xl scale-110' : 'border-transparent'}
+                h-10 w-10 md:h-11 md:w-11 text-sm md:text-lg rounded-xl flex items-center justify-center transition-all duration-300 relative border-2
+                ${isSelected ? 'bg-[#6b1421] border-[#6b1421] text-white font-black shadow-2xl scale-105' : 'border-transparent'}
                 ${!isSelected && !isDisabled ? 'text-[#2c1810] font-black hover:bg-[#6b1421] hover:text-white hover:shadow-lg' : ''}
                 ${isDisabled ? 'text-[#6b1421]/10 cursor-not-allowed border-transparent' : ''}
                 ${isToday && !isSelected ? 'text-[#6b1421] font-black border-[#6b1421]/40 bg-white/50' : ''}
@@ -103,7 +103,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
             >
               {date.getDate()}
               {isToday && !isSelected && (
-                <div className="absolute top-1 right-1 w-2 h-2 bg-[#6b1421] rounded-full" />
+                <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#6b1421] rounded-full" />
               )}
             </button>
           );
