@@ -15,6 +15,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
     const month = currentMonth.getMonth();
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
     const calendarDays = [];
     for (let i = 0; i < firstDay; i++) {
       calendarDays.push(null);
@@ -42,13 +43,9 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
 
   const isDayDisabled = (date: Date) => {
     if (!schedule || schedule.length === 0) return false;
-    
-    // JS getDay(): 0=Sun, 1=Mon... 6=Sat
-    // Backend: 0=Mon, 6=Sun
     const jsDay = date.getDay();
-    const backendDay = (jsDay + 6) % 7;
-    
-    const dayConfig = schedule.find(s => s.day_of_week === backendDay);
+    const backendDay = jsDay === 0 ? 6 : jsDay - 1;
+    const dayConfig = schedule.find(s => Number(s.day_of_week) === backendDay);
     return dayConfig ? !dayConfig.is_active : false;
   };
 
@@ -56,30 +53,33 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
   today.setHours(0,0,0,0);
 
   return (
-    <div className="bg-[#f5f1e8] p-4 rounded-2xl border-4 border-[#6b1421]/20">
-      <div className="flex justify-between items-center mb-4">
-        <h4 className="text-[#6b1421] font-black capitalize">
+    <div className="bg-[#f5f1e8] p-8 rounded-[40px] border-8 border-[#6b1421]/10 shadow-inner w-full">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-10">
+        <h4 className="text-[#6b1421] text-3xl font-black capitalize tracking-tighter">
           {currentMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
         </h4>
-        <div className="flex gap-1">
-          <button onClick={handlePrevMonth} className="p-1 hover:bg-[#6b1421]/10 rounded-full text-[#6b1421] transition-colors">
-            <ChevronLeft size={20} />
+        <div className="flex gap-3">
+          <button onClick={handlePrevMonth} className="w-12 h-12 flex items-center justify-center hover:bg-[#6b1421] hover:text-white rounded-full text-[#6b1421] transition-all border-4 border-[#6b1421]/10 shadow-md">
+            <ChevronLeft size={24} />
           </button>
-          <button onClick={handleNextMonth} className="p-1 hover:bg-[#6b1421]/10 rounded-full text-[#6b1421] transition-colors">
-            <ChevronRight size={20} />
+          <button onClick={handleNextMonth} className="w-12 h-12 flex items-center justify-center hover:bg-[#6b1421] hover:text-white rounded-full text-[#6b1421] transition-all border-4 border-[#6b1421]/10 shadow-md">
+            <ChevronRight size={24} />
           </button>
         </div>
       </div>
       
-      <div className="grid grid-cols-7 gap-1 text-center mb-2">
-        {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, i) => (
-          <div key={`${d}-${i}`} className="text-[10px] font-black text-[#6b1421]/40">{d}</div>
+      {/* Weekday Headers */}
+      <div className="grid grid-cols-7 gap-4 justify-items-center mb-6">
+        {['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'].map((d, i) => (
+          <div key={`${d}-${i}`} className="text-sm font-black uppercase text-[#6b1421]/50 tracking-[0.2em]">{d}</div>
         ))}
       </div>
       
-      <div className="grid grid-cols-7 gap-1">
+      {/* Days Grid */}
+      <div className="grid grid-cols-7 gap-4 justify-items-center">
         {days.map((date, i) => {
-          if (!date) return <div key={`empty-${i}`} className="h-8" />;
+          if (!date) return <div key={`empty-${i}`} className="h-14 w-full" />;
           
           const isSelected = selectedDate === formatDate(date);
           const isPast = date < today;
@@ -93,15 +93,18 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ selectedDate, onDateSel
               disabled={isDisabled}
               onClick={() => onDateSelect(formatDate(date))}
               className={`
-                h-8 w-8 text-xs rounded-full flex items-center justify-center transition-all
-                ${isSelected ? 'bg-[#6b1421] text-white font-black shadow-lg shadow-[#6b1421]/30' : ''}
-                ${!isSelected && !isDisabled ? 'text-[#2c1810] font-bold hover:bg-[#6b1421]/10' : ''}
-                ${isDisabled ? 'text-gray-300 cursor-not-allowed opacity-30' : ''}
-                ${isToday && !isSelected ? 'text-[#6b1421] font-black border-2 border-[#6b1421]/30' : ''}
+                h-14 w-14 text-lg rounded-2xl flex items-center justify-center transition-all duration-300 relative border-2
+                ${isSelected ? 'bg-[#6b1421] border-[#6b1421] text-white font-black shadow-2xl scale-110' : 'border-transparent'}
+                ${!isSelected && !isDisabled ? 'text-[#2c1810] font-black hover:bg-[#6b1421] hover:text-white hover:shadow-lg' : ''}
+                ${isDisabled ? 'text-[#6b1421]/10 cursor-not-allowed border-transparent' : ''}
+                ${isToday && !isSelected ? 'text-[#6b1421] font-black border-[#6b1421]/40 bg-white/50' : ''}
               `}
-              title={isDisabledBySchedule ? "Barbería cerrada" : ""}
+              title={isDisabledBySchedule ? "Cerrado" : ""}
             >
               {date.getDate()}
+              {isToday && !isSelected && (
+                <div className="absolute top-1 right-1 w-2 h-2 bg-[#6b1421] rounded-full" />
+              )}
             </button>
           );
         })}

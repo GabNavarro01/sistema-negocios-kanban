@@ -1,39 +1,16 @@
-import React from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { Clock, Phone, User as UserIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Phone, Clock, Trash2, Calendar } from 'lucide-react';
 
 interface AppointmentCardProps {
   appointment: any;
-  isOverlay?: boolean;
   onUpdate?: (id: number, data: any) => void;
-  onEdit?: (appointment: any) => void;
+  onEdit?: (appointment: any, isReschedule?: boolean) => void;
+  onDelete?: (id: number) => void;
+  onReschedule?: (id: number, date: string) => void;
 }
 
-const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, isOverlay, onUpdate, onEdit }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: appointment.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  if (isDragging && !isOverlay) {
-    return (
-      <div 
-        ref={setNodeRef} 
-        style={style} 
-        className="bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg h-32 opacity-50 mb-3"
-      />
-    );
-  }
+const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, onUpdate, onEdit, onDelete, onReschedule }) => {
+  const [showOptions, setShowOptions] = useState(false);
 
   const statusConfig: Record<string, { color: string, label: string, bg: string, text: string }> = {
     pending: { color: 'border-orange-300', label: 'A Confirmar', bg: 'bg-orange-100', text: 'text-orange-900' },
@@ -46,32 +23,64 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, isOverla
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
-      className={`${config.bg} border-2 ${config.color} p-3 rounded-xl shadow-sm mb-2 group transition-all hover:shadow-md ${isOverlay ? 'shadow-2xl scale-105 rotate-1' : ''}`}
+      className={`${config.bg} border-2 ${config.color} p-4 rounded-2xl shadow-sm mb-3 group transition-all hover:shadow-md relative`}
     >
-      <div className="flex justify-between items-center gap-3 mb-3" {...attributes} {...listeners}>
-        {/* Col 1: Logo/Time */}
-        <div className="flex items-center gap-2 shrink-0">
-          <div className="bg-white/50 p-1.5 rounded-lg shadow-sm border border-white/20">
-            <Clock size={14} className="text-primary" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-black text-gray-900 text-[10px] leading-none">{appointment.start_time.substring(0,5)}</span>
-            <span className="text-gray-500 text-[8px] font-bold leading-none mt-0.5">{appointment.end_time.substring(0,5)}</span>
-          </div>
+      {/* Options Overlay */}
+      {showOptions && (
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-20 rounded-2xl p-4 flex flex-col gap-2 justify-center animate-in fade-in zoom-in duration-200">
+           <button 
+             onClick={() => { setShowOptions(false); onEdit?.(appointment, false); }}
+             className="flex items-center gap-3 w-full p-3 bg-gray-100 hover:bg-primary hover:text-white rounded-xl transition-all font-black text-xs uppercase"
+           >
+             <Clock size={16} /> Cambiar Hora
+           </button>
+           <button 
+             onClick={() => { 
+                setShowOptions(false); 
+                onEdit?.(appointment, true);
+             }}
+             className="flex items-center gap-3 w-full p-3 bg-gray-100 hover:bg-primary hover:text-white rounded-xl transition-all font-black text-xs uppercase"
+           >
+             <Calendar size={16} /> Cambiar Fecha
+           </button>
+           <button onClick={() => setShowOptions(false)} className="mt-2 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600">Cancelar</button>
+        </div>
+      )}
+
+      {/* Edit Button - Top Right */}
+      {appointment.status !== 'completed' && appointment.status !== 'cancelled' && (
+        <button
+          onClick={(e) => { e.stopPropagation(); setShowOptions(true); }}
+          className="absolute -top-2 -right-2 w-8 h-8 bg-white border-2 border-gray-200 rounded-lg flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors shadow-sm z-10"
+          title="Opciones de tiempo"
+        >
+          <Clock size={16} />
+        </button>
+      )}
+
+      {/* Delete Button - Bottom Right */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onDelete?.(appointment.id); }}
+        className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border-2 border-red-100 rounded-lg flex items-center justify-center text-red-300 hover:text-red-600 hover:border-red-600 transition-colors shadow-sm z-10"
+        title="Eliminar turno"
+      >
+        <Trash2 size={16} />
+      </button>
+
+      <div className="flex justify-between items-start gap-2 mb-3 mt-1">
+        <div className="flex flex-col shrink-0">
+          <span className="font-black text-gray-900 text-xs leading-none">{appointment.start_time.substring(0,5)}</span>
+          <span className="text-gray-500 text-[10px] font-bold leading-none mt-1">{appointment.end_time.substring(0,5)}</span>
         </div>
 
-        {/* Col 2: Name */}
         <div className="flex-1 min-w-0">
-          <h4 className="font-black text-gray-900 text-sm truncate">{appointment.client_name}</h4>
-          <div className="flex items-center gap-1 text-gray-600">
+          <h4 className="font-black text-gray-900 text-sm truncate leading-tight">{appointment.client_name}</h4>
+          <div className="flex items-center gap-1 text-gray-600 mt-0.5">
             <Phone size={10} className="shrink-0" />
             <span className="text-[10px] font-bold truncate">{appointment.client_phone}</span>
           </div>
         </div>
 
-        {/* Col 3: Status/Service */}
         <div className="flex flex-col items-end gap-1 shrink-0">
           <span className={`text-[8px] uppercase tracking-tighter font-black px-2 py-0.5 rounded-full bg-white/40 border ${config.color} ${config.text}`}>
             {config.label}
@@ -82,11 +91,11 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, isOverla
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-gray-100">
+      <div className="grid grid-cols-2 gap-1.5 pt-2.5 border-t border-gray-100">
         {appointment.status === 'pending' && (
           <button 
             onClick={() => onUpdate?.(appointment.id, { status: 'confirmed' })}
-            className="text-[9px] bg-violet-600 hover:bg-violet-700 text-white px-2.5 py-2 rounded-lg transition-colors font-black shadow-sm border border-violet-700"
+            className="text-[9px] bg-violet-600 hover:bg-violet-700 text-white py-1.5 rounded-lg transition-colors font-black shadow-sm border border-violet-700"
           >
             Confirmar
           </button>
@@ -94,7 +103,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, isOverla
         {appointment.status === 'confirmed' && (
           <button 
             onClick={() => onUpdate?.(appointment.id, { status: 'completed' })}
-            className="text-[9px] bg-green-600 hover:bg-green-700 text-white px-2.5 py-2 rounded-lg transition-colors font-black shadow-sm border border-green-700"
+            className="text-[9px] bg-green-600 hover:bg-green-700 text-white py-1.5 rounded-lg transition-colors font-black shadow-sm border border-green-700"
           >
             Completar
           </button>
@@ -102,17 +111,11 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment, isOverla
         {appointment.status !== 'cancelled' && appointment.status !== 'completed' && (
           <button 
             onClick={() => onUpdate?.(appointment.id, { status: 'cancelled' })}
-            className="text-[9px] bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-2 rounded-lg transition-colors font-black border border-red-200"
+            className="text-[9px] bg-red-50 hover:bg-red-100 text-red-600 py-1.5 rounded-lg transition-colors font-black border border-red-200"
           >
             Cancelar
           </button>
         )}
-        <button 
-          onClick={() => onEdit?.(appointment)}
-          className="text-[9px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-2.5 py-2 rounded-lg transition-colors font-black border border-gray-300 ml-auto"
-        >
-          Editar Hora
-        </button>
       </div>
     </div>
   );

@@ -31,6 +31,16 @@ def update_appointment(appointment_id: int, appointment_in: AppointmentUpdate, d
     db.refresh(appointment)
     return appointment
 
+@router.delete("/appointments/{appointment_id}")
+def delete_appointment(appointment_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    db.delete(appointment)
+    db.commit()
+    return {"message": "Appointment deleted"}
+
 @router.get("/schedule", response_model=List[ScheduleResponse])
 def get_schedule(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(BarberSchedule).order_by(BarberSchedule.day_of_week).all()
