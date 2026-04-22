@@ -9,6 +9,10 @@
 
 Este sistema es una solución integral diseñada para modernizar la gestión de sus turnos y la interacción con sus clientes. El sistema ofrece una experiencia de usuario premium, permitiendo a los clientes de , por ejemplo, Melion Barber y Zetta Tattoo reservar turnos de forma visual y al barbero gestionar su agenda mediante un tablero Kanban dinámico.
 
+<div style="text-align:center;">
+  <a href="https://ibb.co/rR8R3HpY"><img src="https://i.ibb.co/fz6z9HNf/Captura-de-pantalla-2026-04-22-165023.png" alt="Captura-de-pantalla-2026-04-22-165023" border="0" style="display:inline-block; max-width:500px; height:auto;"></a>
+</div>
+
 ## Características Principales
 
 ### Para Clientes (Portal Público)
