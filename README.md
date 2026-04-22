@@ -1,4 +1,4 @@
-# Melion Barber - Sistema de Gestión de Barbería
+# Sistema de Gestión para Negocios basados en Turnos
 
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
@@ -7,9 +7,9 @@
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-Melion Barber es el nombre de esta exclusiva barbería, y este sistema es una solución integral diseñada para modernizar la gestión de sus turnos y la interacción con sus clientes. El sistema ofrece una experiencia de usuario premium, permitiendo a los clientes de Melion Barber reservar turnos de forma visual y al barbero gestionar su agenda mediante un tablero Kanban dinámico.
+Este sistema es una solución integral diseñada para modernizar la gestión de sus turnos y la interacción con sus clientes. El sistema ofrece una experiencia de usuario premium, permitiendo a los clientes de , por ejemplo, Melion Barber y Zetta Tattoo reservar turnos de forma visual y al barbero gestionar su agenda mediante un tablero Kanban dinámico.
 
-## 🚀 Características Principales
+## Características Principales
 
 ### Para Clientes (Portal Público)
 - **Selección Visual de Servicios**: Interfaz moderna con tarjetas e imágenes representativas para cada servicio.
@@ -17,14 +17,14 @@ Melion Barber es el nombre de esta exclusiva barbería, y este sistema es una so
 - **Validación Automática**: Formateo dinámico de números de teléfono (`+XX XX-XXXXX-XXXX`) y control de disponibilidad en tiempo real.
 - **Confirmación Inmediata**: Proceso de reserva en 3 simples pasos.
 
-### Para Barberos (Dashboard Privado)
+### Para Dueños (Dashboard Privado)
 - **Tablero Kanban**: Gestión de turnos mediante arrastrar y soltar (Drag & Drop) para organizar el flujo de trabajo.
 - **Gestión de Estados**: Codificación por colores para estados (Pendiente, Confirmado, Completado, Cancelado).
 - **Configuración de Disponibilidad**: Panel para activar/desactivar días de la semana y definir rangos horarios de atención.
 - **Edición Manual**: Capacidad de modificar horarios de turnos existentes mediante una interfaz intuitiva.
 - **Seguridad**: Acceso protegido mediante autenticación JWT.
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 ### Frontend
 - **React 18** + **TypeScript**
@@ -41,7 +41,7 @@ Melion Barber es el nombre de esta exclusiva barbería, y este sistema es una so
 - **Pydantic** (Validación de datos)
 - **Python 3.9+**
 
-## 📦 Instalación y Configuración
+## Instalación y Configuración
 
 ### Requisitos Previos
 - Python 3.9 o superior
@@ -81,7 +81,7 @@ Melion Barber es el nombre de esta exclusiva barbería, y este sistema es una so
    npm install
    ```
 
-## 🏃‍♂️ Cómo Ejecutar el Proyecto
+##  Cómo Ejecutar el Proyecto
 
 Para que el sistema funcione correctamente, debes iniciar tanto el backend como el frontend.
 
@@ -101,7 +101,7 @@ Para que el sistema funcione correctamente, debes iniciar tanto el backend como 
    La aplicación estará disponible en `http://localhost:5173`.
 
 ## 👤 Credenciales de Administrador
-Para acceder al dashboard de barbería:
+Para acceder al dashboard del sistema:
 - **Usuario**: `admin`
 - **Contraseña**: `admin123`
 
