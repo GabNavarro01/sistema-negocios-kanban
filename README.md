@@ -103,11 +103,3 @@ Para que el sistema funcione correctamente, debes iniciar tanto el backend como 
    npm run dev
    ```
    La aplicación estará disponible en `http://localhost:5173`.
-
-## 👤 Credenciales de Administrador
-Para acceder al dashboard del sistema:
-- **Usuario**: `admin`
-- **Contraseña**: `admin123`
-
----
-Desarrollado con ❤️ para Melion Barber.
